@@ -11,10 +11,12 @@ class Employee:
     
 class HourlyEmployee(Employee):
     def __init__(self, employee_id, first_name, last_name, weekly_dues, hourly_rate):
+        Employee.__init__(self, employee_id, first_name, last_name, weekly_dues)
         self.__hourly_rate = hourly_rate
 
 
 class SalariedEmployee(Employee):
     def __init__(self, employee_id, first_name, last_name, weekly_dues, salary, commission_rate):
+        Employee.__init__(self, employee_id, first_name, last_name, salary, commission_rate)
         self.__salary = salary
         self.__commission_rate = commission_rate
