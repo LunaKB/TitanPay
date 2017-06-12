@@ -11,5 +11,5 @@ class Address:
         return full_address
 
 if __name__ == "__main__":
-    test_address = Address('421 23rd Ave. N.','St. Petersburg','FL','33704')
+    test_address = Address('255 10th Ave. N.','St. Petersburg','FL','33624')
     print('Your address is:', test_address.get_address())
