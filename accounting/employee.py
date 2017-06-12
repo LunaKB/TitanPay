@@ -5,6 +5,7 @@
 from datetime import date, timedelta, datetime;
 from receipt import Receipt;
 from time_card import TimeCard;
+#import payment_method; 
 
 class Employee:
     def __init__(self, employee_id, first_name, last_name, weekly_dues, payment_method):
@@ -13,7 +14,8 @@ class Employee:
         self.__last_name = last_name;
         self.__weekly_dues = weekly_dues;
         self.__payment_method = payment_method;
-
+        #self.__payment_obj = PaymentMethod(payment_method);
+        
     def get_first_name(self):
         return self.__first_name;
 
@@ -56,6 +58,7 @@ class HourlyEmployee(Employee):
                 total += time_card.calculate_daily_pay(self.__hourly_rate);
 
         self.get_payment_method().pay("%s %s" % (self.get_first_name(), self.get_last_name()), total);
+        #self.__payment_obj.pay("%s %s" % (self.get_first_name(), self.get_last_name()), total);
 
 
 class SalariedEmployee(Employee):
@@ -77,3 +80,4 @@ class SalariedEmployee(Employee):
             if receipt.get_date() <= start_date and receipt.get_date() >= end_date:
                 total += (self.__commission_rate * receipt.get_sale_amount());
         self.get_payment_method().pay("%s %s" % (self.get_first_name(), self.get_last_name()), total);
+        #self.__payment_obj.pay("%s %s" % (self.get_first_name(), self.get_last_name()), total);
