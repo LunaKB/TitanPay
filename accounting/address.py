@@ -10,6 +10,6 @@ class Address:
         full_address = self.__street_address + ' ' + self.__city + ', ' + self.__state + '. ' + self.__zip
         return full_address
 
-if __name__ == "__main__":
-    test_address = Address('255 10th Ave. N.','St. Petersburg','FL','33624')
-    print('Your address is:', test_address.get_address())
+#if __name__ == "__main__":
+    #test_address = Address('255 10th Ave. N.','St. Petersburg','FL','33624')
+    #print('Your address is:', test_address.get_address())
