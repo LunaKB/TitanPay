@@ -5,7 +5,6 @@
 from datetime import date, timedelta, datetime;
 from receipt import Receipt;
 from time_card import TimeCard;
-import payment_method; 
 
 class Employee:
     def __init__(self, employee_id, first_name, last_name, weekly_dues, payment_method):
@@ -13,7 +12,7 @@ class Employee:
         self.__first_name = first_name;
         self.__last_name = last_name;
         self.__weekly_dues = weekly_dues;
-        self.__payment_method = PaymentMethod(payment_method);
+        self.__payment_method = payment_method;
         
     def get_first_name(self):
         return self.__first_name;

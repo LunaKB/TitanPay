@@ -1,5 +1,5 @@
-import address
-import bank_account
+from address import Address
+from bank_account import BankAccount
 
 class PaymentMethod:
     def __init__(self, payment_method):
@@ -7,14 +7,15 @@ class PaymentMethod:
 
 
 class MailPayment(PaymentMethod):
-    def __init__(self):
+    def __init__(self, address, city, state, zip_code):
         PaymentMethod.__init__(self, 'mail')
         self.__address = Address(address, city, state, zip_code)
 
     def pay(self, name, total):
-        return "%s %s %s %s %s %s" \
-               % ('Mailing a check to', name,
-                  'for', total, 'to', self.__address.get_address())
+        print("Mailing a check to %s for %s to %s" % (name, '${:,.2f}'.format(total), self.__address.get_address()));
+        #return "%s %s %s %s %s %s" \
+         #      % ('Mailing a check to', name,
+          #        'for', total, 'to', self.__address.get_address())
 
 
 class PickUpPayment(PaymentMethod):
@@ -22,13 +23,14 @@ class PickUpPayment(PaymentMethod):
         PaymentMethod.__init__(self, 'pick up')
 
     def pay(self, name, total):
-        return "%s %s %s %s %s" \
-               % ('A check for', total, 'is waiting for', name,
-                  'at the PostMaster.')
+        print("A check for %s is waiting for %s at the PostMaster." %('${:,.2f}'.format(total), name));
+        #return "%s %s %s %s %s" \
+         #      % ('A check for', total, 'is waiting for', name,
+          #        'at the PostMaster.')
 
 
 class DirectDepositPayment(PaymentMethod):
-    def __init__(self):
+    def __init__(self, bank_name, routing_number, account_id):
         PaymentMethod.__init__(self, 'direct deposit')
         self.__bank_account = BankAccount(bank_name, routing_number, account_id)
 
