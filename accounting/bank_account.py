@@ -5,5 +5,5 @@ class BankAccount:
         self.__account_id = account_id;
 
     def deposit(self, amt):
-        print("Depositing %s in %s Account Number: %d using Routing Number: %d" %
+        return ("Depositing %s in %s Account Number: %d using Routing Number: %d" %
               ('${:,.2f}'.format(amt), self.__bank_name, self.__account_id, self.__routing_number));
