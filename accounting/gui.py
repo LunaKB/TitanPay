@@ -1,4 +1,5 @@
 import tkinter
+from payroll import Payroll;
 
 class MainScreen:
     
@@ -144,9 +145,14 @@ class MainScreen:
         tkinter.mainloop();
 
     def show_run(self):
+        payroll = Payroll();
+
         self.sub_window = tkinter.Tk();
-        self.run_payroll_button = tkinter.Button(self.sub_window, text = 'Run Payroll');
+
+        self.run_payroll_button = tkinter.Button(self.sub_window, text = 'Run Payroll', command=lambda: payroll.process_payroll(self.payroll_message));
         self.run_payroll_button.pack(padx = 2, pady = 2);
-        
+
+        self.payroll_message = tkinter.Label(self.sub_window, text = "Employee Payroll", bd = 0, padx = 2);
+        self.payroll_message.pack();
 
 test_gui = MainScreen();
