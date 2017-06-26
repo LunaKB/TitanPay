@@ -1,6 +1,4 @@
 import sqlite3
-import csv;
-import datetime;
 
 class Database:
     def __init__(self):
