@@ -5,6 +5,7 @@ class Database:
         self.__file = '../data/TitanPay.sqlite';
         self.__connection = lambda: None;
         self.__cursor = lambda: None;
+        self.__allow_data = True; # stops duplicate time card and receipt data
 
 
         self.__table_hourly_employees = "hourly_employees";
@@ -38,6 +39,7 @@ class Database:
 
         self.__create_tables();
 
+## Database Connections ##
     def __connect(self):
         self.__connection = sqlite3.connect(self.__file);
         self.__cursor = self.__connection.cursor();
@@ -48,6 +50,7 @@ class Database:
     def __disconnect(self):
         self.__connection.close();
 
+## Table Creation ##
     def __create_hourly_table(self):
         hourly_table = False;
         try:
@@ -190,7 +193,7 @@ class Database:
         self.__commit();
         self.__disconnect();
 
-
+## Hourly Employee ##
     def insert_hourly_employee(self, id, last_name, first_name, rate, union_dues, payment_method):
         self.__connect();
         param = [];
@@ -208,6 +211,7 @@ class Database:
                             method=self.__column_payment_method), param);
         except sqlite3.IntegrityError:
             print("Employee %d already inserted" %(id));
+            self.__allow_data = False;
 
         self.__commit();
         self.__disconnect();
@@ -223,6 +227,7 @@ class Database:
 
         return rows;
 
+## Salary Employee ##
     def insert_salary_employee(self, id, last_name, first_name, salary, commission, union_dues, payment_method):
         self.__connect();
         param = [];
@@ -245,36 +250,81 @@ class Database:
         self.__commit();
         self.__disconnect();
 
+    def get_all_salary_employees(self):
+        self.__connect();
+
+        self.__cursor.execute("SELECT * FROM {tn}".format(tn=self.__table_salaried_employees));
+        rows = self.__cursor.fetchall();
+
+        self.__commit();
+        self.__disconnect();
+
+        return rows;
+
+## Receipt ##
     def insert_receipt(self, id, first_name,  item, units, cost, total):
+        if self.__allow_data:
+            self.__connect();
+            param = [];
+            param.extend((id, first_name, item, units, cost, total));
+
+            self.__cursor.execute(
+                "INSERT INTO {tn} ({id}, {fname}, {item}, {units}, {cost}, {total}) VALUES(?, ?, ?, ?, ?, ?)"
+                    .format(tn=self.__table_receipts,
+                            id=self.__column_emp_id,
+                            fname=self.__column_first_name,
+                            item=self.__column_item,
+                            units=self.__column_units,
+                            cost=self.__column_unit_cost,
+                            total=self.__column_total), param);
+
+            self.__commit();
+            self.__disconnect();
+
+    def get_all_receipts_for_employee(self, id):
         self.__connect();
         param = [];
-        param.extend((id, first_name, item, units, cost, total));
+        param.append(id);
 
-        self.__cursor.execute(
-            "INSERT INTO {tn} ({id}, {fname}, {item}, {units}, {cost}, {total}) VALUES(?, ?, ?, ?, ?, ?)"
-                .format(tn=self.__table_receipts,
-                        id=self.__column_emp_id,
-                        fname=self.__column_first_name,
-                        item=self.__column_item,
-                        units=self.__column_units,
-                        cost=self.__column_unit_cost,
-                        total=self.__column_total), param);
+        self.__cursor.execute("SELECT * FROM {tn} WHERE {id} = ?"
+                              .format(tn=self.__table_receipts,
+                                      id=self.__column_emp_id), param);
+        rows = self.__cursor.fetchall();
 
         self.__commit();
         self.__disconnect();
 
+        return rows;
+
+## Time Card ##
     def insert_time_card(self, id,in_time, out_time, date):
+        if self.__allow_data:
+            self.__connect();
+            param = [];
+            param.extend((id,in_time, out_time, date));
+
+            self.__cursor.execute(
+                "INSERT INTO {tn} ({id}, {in_t}, {out_t}, {date}) VALUES(?, ?, ?, ?)"
+                    .format(tn=self.__table_time_cards,
+                            id=self.__column_emp_id,
+                            in_t=self.__column_in,
+                            out_t=self.__column_out,
+                            date=self.__column_date), param);
+
+            self.__commit();
+            self.__disconnect();
+
+    def get_all_time_cards_for_employee(self, id):
         self.__connect();
         param = [];
-        param.extend((id,in_time, out_time, date));
+        param.append(id);
 
-        self.__cursor.execute(
-            "INSERT INTO {tn} ({id}, {in_t}, {out_t}, {date}) VALUES(?, ?, ?, ?)"
-                .format(tn=self.__table_time_cards,
-                        id=self.__column_emp_id,
-                        in_t=self.__column_in,
-                        out_t=self.__column_out,
-                        date=self.__column_date), param);
+        self.__cursor.execute("SELECT * FROM {tn} WHERE {id} = ?"
+                              .format(tn=self.__table_time_cards,
+                                      id=self.__column_emp_id), param);
+        rows = self.__cursor.fetchall();
 
         self.__commit();
         self.__disconnect();
+
+        return rows;
