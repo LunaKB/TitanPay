@@ -1,10 +1,9 @@
 import tkinter
-from payroll import Payroll;
+from payroll import Payroll
 
 class MainScreen:
-    
     def __init__(self):
-        
+        self.payroll = Payroll();
         self.main_window = tkinter.Tk();
 
         self.row1 = tkinter.Frame(self.main_window);
@@ -68,7 +67,7 @@ class MainScreen:
         self.salary_entry.pack(padx = 2, pady = 2);
 
         self.display_sales = tkinter.Button(self.row3, text = "Display Sales", height = 2);
-        self.display_sales.pack(side = 'left', padx = 2, pady = 2);   
+        self.display_sales.pack(side = 'left', padx = 2, pady = 2);
 
         self.row4 = tkinter.Frame(self.main_window);
         self.row4.pack(padx = 2, pady = 2);
@@ -139,20 +138,21 @@ class MainScreen:
         self.edit_employee_button = tkinter.Button(self.row7, text = 'Edit Employee Record');
         self.edit_employee_button.pack(side = 'left', padx = 2, pady = 2);
 
+        self.import_employee_button = tkinter.Button(self.row7, text = 'Import Employees', command = self.payroll.import_data);
+        self.import_employee_button.pack(side = 'left', padx = 2, pady = 2);
+
         self.process_payroll_button = tkinter.Button(self.row7, text = 'Process Payroll', command = self.show_run);
         self.process_payroll_button.pack(side = 'left', padx = 2, pady = 2);
-      
+
         tkinter.mainloop();
 
     def show_run(self):
-        payroll = Payroll();
-
         self.sub_window = tkinter.Tk();
 
-        self.run_payroll_button = tkinter.Button(self.sub_window, text = 'Run Payroll', command=lambda: payroll.process_payroll(self.payroll_message));
+        self.run_payroll_button = tkinter.Button(self.sub_window, text = 'Run Payroll', command=lambda: self.payroll.process_payroll(self.payroll_message));
         self.run_payroll_button.pack(padx = 2, pady = 2);
 
         self.payroll_message = tkinter.Label(self.sub_window, text = "Employee Payroll", bd = 0, padx = 2);
         self.payroll_message.pack();
 
-test_gui = MainScreen();
+test_gui = MainScreen()

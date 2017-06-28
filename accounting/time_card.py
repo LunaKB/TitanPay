@@ -1,5 +1,4 @@
-from datetime import date, datetime;
-
+from datetime import date, datetime
 
 class TimeCard:
 
@@ -22,6 +21,4 @@ class TimeCard:
         if hours_worked <= 8:
             return rate * hours_worked;
         else:
-            # The previous way of calculating overtime pay resulted in an answer that was too low.
-            # This should be more accurate.
             return (rate * 1.5) * hours_worked;
