@@ -7,7 +7,7 @@ class TestSalariedEmployee(TestCase):
     def test_make_sale(self):
         test_employee = SalariedEmployee('', '', '', '', '', '', '')
         test_employee.make_sale(1)
-        self.assertEquals(1, test_employee.get_number_of_receipts())
+        self.assertEquals(1, test_employee.get_receipt_count())
 
     def test_calculate_pay(self):
         test_employee = SalariedEmployee('', '', '', '', '', '','')
