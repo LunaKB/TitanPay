@@ -8,6 +8,7 @@ class Employee:
         self.__last_name = last_name;
         self.__weekly_dues = weekly_dues;
         self.__payment_method = payment_method;
+        self.__last_pay_amount = 0;
 
     def get_id(self):
         return self.__employee_id;
@@ -27,12 +28,21 @@ class Employee:
     def get_payment_method(self):
         return self.__payment_method;
 
+    def set_last_pay_amount(self, amt):
+        self.__last_pay_amount = amt;
+
+    def get_last_pay_amount(self):
+        return self.__last_pay_amount;
+
 
 class HourlyEmployee(Employee):
     def __init__(self, employee_id, first_name, last_name, weekly_dues, hourly_rate, payment_method):
         Employee.__init__(self, employee_id, first_name, last_name, weekly_dues, payment_method);
         self.__hourly_rate = hourly_rate;
         self.__time_cards = [];
+
+    def get_time_card_count(self):
+        return len(self.__time_cards);
 
     def clock_in(self, in_date):
         self.__time_cards.append(TimeCard(in_date.date(), in_date.time()));
@@ -41,6 +51,8 @@ class HourlyEmployee(Employee):
         for time_card in self.__time_cards:
             if time_card.get_date() == out_date.date():
                 time_card.set_end_time(out_date.time());
+                return True;
+        return False;
 
     # The calculate_pay method requires datetime.now().date() for the
     # parameters start_date and end_date.
@@ -52,6 +64,7 @@ class HourlyEmployee(Employee):
         total -= self.get_union_dues();
         if total <= 0:
             total = 0;
+        self.set_last_pay_amount(total);
         return self.get_payment_method().pay("%s %s" % (self.get_first_name(), self.get_last_name()), total);
 
 
@@ -61,6 +74,9 @@ class SalariedEmployee(Employee):
         self.__salary = salary;
         self.__commission_rate = commission_rate;
         self.__receipts = [];
+
+    def get_receipt_count(self):
+        return len(self.__receipts);
 
     def make_sale(self, amt):
         self.__receipts.append(Receipt(amt));
@@ -74,4 +90,5 @@ class SalariedEmployee(Employee):
         total -= self.get_union_dues();
         if total <= 0:
             total = 0;
+        self.set_last_pay_amount(total);
         return self.get_payment_method().pay("%s %s" % (self.get_first_name(), self.get_last_name()), total);
